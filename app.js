@@ -77,6 +77,16 @@ app.post('/todos/:id/edit', (req, res) => {
   .catch(error => console.error(error))
 })
 
+// delete todo
+app.post('/todos/:id/delete', (req, res) => {
+  Todo.findById(req.params.id)
+  .then(todo => {
+    return todo.remove()
+  })
+  .then(() => res.redirect('/'))
+  .catch(error => console.error(error))
+})
+
 app.listen(3000, () => {
   console.log('Express server is listening on http://localhost:3000/')
 })
