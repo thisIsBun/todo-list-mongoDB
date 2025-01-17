@@ -26,6 +26,7 @@ app.set('view engine', 'hbs')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
+// index page
 app.get('/', (req, res) => {
   Todo.find()
   .lean()
@@ -33,15 +34,25 @@ app.get('/', (req, res) => {
   .catch(error => console.error(error))
 })
 
+// create new todo
 app.get('/todos/new', (req, res) => {
   return res.render('new')
 })
 
+// post new todo
 app.post('/todos', (req, res) => {
   const newTodo = req.body.name
-  
+
   Todo.create({ name: newTodo })
   .then(() => res.redirect('/'))
+  .catch(error => console.error(error))
+})
+
+// review todo detail
+app.get('/todos/:id', (req, res) => {
+  Todo.findById(req.params.id)
+  .lean()
+  .then((todo) => res.render('detail', { todo }))
   .catch(error => console.error(error))
 })
 
