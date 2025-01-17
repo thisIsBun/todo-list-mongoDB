@@ -56,6 +56,27 @@ app.get('/todos/:id', (req, res) => {
   .catch(error => console.error(error))
 })
 
+// view edit todo page
+app.get('/todos/:id/edit', (req, res) => {
+  Todo.findById(req.params.id)
+  .lean()
+  .then(todo => res.render('edit', { todo }))
+  .catch(error => console.error(error))
+})
+
+// post edit todo
+app.post('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  
+  Todo.findById(id)
+  .then(todo => {
+    todo.name = req.body.name
+    return todo.save()
+  })
+  .then(() => res.redirect(`/todos/${id}`))
+  .catch(error => console.error(error))
+})
+
 app.listen(3000, () => {
   console.log('Express server is listening on http://localhost:3000/')
 })
