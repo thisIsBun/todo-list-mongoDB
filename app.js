@@ -70,7 +70,9 @@ app.post('/todos/:id/edit', (req, res) => {
   
   Todo.findById(id)
   .then(todo => {
-    todo.name = req.body.name
+    const { name, isDone } = req.body
+    todo.name = name
+    todo.isDone = isDone === 'on'
     return todo.save()
   })
   .then(() => res.redirect(`/todos/${id}`))
