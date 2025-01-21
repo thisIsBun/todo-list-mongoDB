@@ -1,6 +1,6 @@
 <ul class="list-group">
   {{#each todos}}
-  <li class="list-group-item">
+  <li class="list-group-item border-primary">
     <div class="row">
       <div class="col-auto me-auto">
         <input style="vertical-align: middle;" type="checkbox" value={{ this.isDone }} name="isDone" {{#if this.isDone}}checked{{/if}} disabled>
