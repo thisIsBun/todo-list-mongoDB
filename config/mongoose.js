@@ -1,19 +1,19 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose';
+import 'dotenv/config';
 
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
-}
+mongoose.connect(process.env.MONGOOSE_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-mongoose.connect(process.env.MONGOOSE_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-
-const db = mongoose.connection
+const db = mongoose.connection;
 
 db.on('error', () => {
-  console.log('mongodb error!')
-})
+  console.log('mongodb error!');
+});
 
 db.once('open', () => {
-  console.log('mongodb connected!')
-})
+  console.log('mongodb connected!');
+});
 
-module.exports = db
+export default db;

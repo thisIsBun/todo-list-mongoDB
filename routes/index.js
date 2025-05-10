@@ -1,9 +1,9 @@
-const express = require('express')
-const router = express.Router()
-const home = require('./modules/home')
-const todos = require('./modules/todos')
+import express from 'express';
+import home from './modules/home.js'
+import todos from './modules/todos.js'
 
-router.use('/', home)
-router.use('/todos', todos)
+const router = express.Router();
+router.use('/', home);
+router.use('/todos', todos);
 
-module.exports = router
+export default router;

@@ -1,13 +1,14 @@
-const express = require('express')
-const router = express.Router()
-const Todo = require('../../models/todo')
+import express from 'express';
+import Todo from '../../models/todo.js'
+
+const router = express.Router();
 
 router.get('/', (req, res) => {
   Todo.find()
-  .lean()
-  .sort({ _id: "asc" })
-  .then(todos => res.render('index', { todos }))
-  .catch(error => console.error(error))
-})
+    .lean()
+    .sort({ _id: 'asc' })
+    .then((todos) => res.render('index', { todos }))
+    .catch((error) => console.error(error));
+});
 
-module.exports = router
+export default router;
