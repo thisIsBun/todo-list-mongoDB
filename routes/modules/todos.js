@@ -52,10 +52,7 @@ router.put('/:id', (req, res) => {
 
 // delete todo
 router.delete('/:id', (req, res) => {
-  Todo.findById(req.params.id)
-    .then((todo) => {
-      return todo.remove();
-    })
+  Todo.deleteOne({ _id: req.params.id })
     .then(() => res.redirect('/'))
     .catch((error) => console.error(error));
 });
