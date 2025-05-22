@@ -4,6 +4,7 @@ import methodOverride from './config/methodOverride.cjs';
 import router from './routes/index.js'
 import './config/mongoose.js'
 import session from 'express-session'
+import usePassport from './config/passport.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,6 +18,7 @@ app.use(session({
 }))
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+usePassport(app);
 app.use(router);
 
 app.listen(PORT, () => {
