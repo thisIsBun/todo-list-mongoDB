@@ -9,9 +9,10 @@ router.get('/new', (req, res) => {
 });
 
 // post new todo
-router.post('', (req, res) => {
+router.post('/', (req, res) => {
+  const userId = req.user._id;
   const newTodo = req.body.name.split(',').map((item) => {
-    return { name: item.trim() };
+    return { name: item.trim(), userId };
   });
 
   Todo.insertMany(newTodo)
@@ -21,7 +22,10 @@ router.post('', (req, res) => {
 
 // review todo detail
 router.get('/:id', (req, res) => {
-  Todo.findById(req.params.id)
+  const userId = req.user._id
+  const _id = req.params.id
+
+  Todo.findOne({ _id, userId })
     .lean()
     .then((todo) => res.render('detail', { todo }))
     .catch((error) => console.error(error));
@@ -29,7 +33,10 @@ router.get('/:id', (req, res) => {
 
 // view edit todo page
 router.get('/:id/edit', (req, res) => {
-  Todo.findById(req.params.id)
+  const userId = req.user._id
+  const _id = req.params.id
+
+  Todo.findOne({ _id, userId })
     .lean()
     .then((todo) => res.render('edit', { todo }))
     .catch((error) => console.error(error));
@@ -37,9 +44,10 @@ router.get('/:id/edit', (req, res) => {
 
 // post edit todo
 router.put('/:id', (req, res) => {
-  const id = req.params.id;
+  const userId = req.user._id
+  const _id = req.params.id;
 
-  Todo.findById(id)
+  Todo.findOne({ _id, userId })
     .then((todo) => {
       const { name, isDone } = req.body;
       todo.name = name;
@@ -52,7 +60,10 @@ router.put('/:id', (req, res) => {
 
 // delete todo
 router.delete('/:id', (req, res) => {
-  Todo.deleteOne({ _id: req.params.id })
+  const userId = req.user._id
+  const _id = req.params.id
+
+  Todo.deleteOne({ _id, userId })
     .then(() => res.redirect('/'))
     .catch((error) => console.error(error));
 });

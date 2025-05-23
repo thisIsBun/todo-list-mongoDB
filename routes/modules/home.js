@@ -4,7 +4,8 @@ import Todo from '../../models/todo.js'
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  Todo.find()
+  const userId = req.user._id
+  Todo.find({ userId })
     .lean()
     .sort({ _id: 'asc' })
     .then((todos) => res.render('index', { todos }))
