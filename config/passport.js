@@ -6,14 +6,16 @@ const usePassport = (app) => {
   app.use(passport.initialize())
   app.use(passport.session())
 
-  passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
+  passport.use(new LocalStrategy({ usernameField: 'email', passReqToCallback: true }, (req, email, password, done) => {
     User.findOne({ email })
-      .then(user => {
+    .then(user => {
         if (!user) {
-          return done(null, false, { message: 'Email no registered'})
+          req.flash('warning_msg', 'Email 沒有註冊過。')
+          return done(null, false)
         }
         if (user.password !== password) {
-          return done(null, false, { message: 'Email or Password not correct'})
+          req.flash('warning_msg', '密碼不正確。')
+          return done(null, false)
         }
         return done(null, user)
       })
