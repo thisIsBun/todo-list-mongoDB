@@ -46,15 +46,15 @@ router.get('/:id/edit', (req, res) => {
 router.put('/:id', (req, res) => {
   const userId = req.user._id
   const _id = req.params.id;
-
+  
   Todo.findOne({ _id, userId })
-    .then((todo) => {
+  .then((todo) => {
       const { name, isDone } = req.body;
       todo.name = name;
       todo.isDone = isDone === 'on';
       return todo.save();
     })
-    .then(() => res.redirect(`/todos/${id}`))
+    .then(() => res.redirect(`/todos/${_id}`))
     .catch((error) => console.error(error));
 });
 

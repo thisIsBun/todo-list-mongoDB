@@ -1,5 +1,6 @@
 import passport from "passport";
 import LocalStrategy from "passport-local";
+import FacebookStrategy from 'passport-facebook';
 import User from '../models/user.js'
 import bcryptjs from "bcryptjs";
 
@@ -26,6 +27,31 @@ const usePassport = (app) => {
       .catch(error => {
         return done(error)
       })
+  }))
+
+  passport.use(new FacebookStrategy({
+    clientID: process.env.FACEBOOK_ID,
+    clientSecret: process.env.FACEBOOK_SECRET,
+    callbackURL: process.env.FACEBOOK_CALLBACK,
+    profileFields: ['email', 'displayName']
+  }, (accessToken, refreshToken, profile, done) => {
+    const { email, name } = profile._json
+
+    User.findOne({ email })
+    .then(user => {
+      if (user) {
+        return done(null, user)
+      }
+
+      bcryptjs.genSalt(10)
+      .then(salt => {
+        const randomPassword = Math.random().toString(36).slice(-8);
+        return bcryptjs.hash(randomPassword, salt)
+      })
+      .then(hash => User.create({ name, email, password: hash }))
+      .then(user => done(null, user))
+      .catch(error => done(error))
+    })
   }))
 
   passport.serializeUser((user, done) => {
